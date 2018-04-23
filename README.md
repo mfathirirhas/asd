@@ -1,0 +1,1 @@
+Some data structures implemented in Go: linkedlist,queue,stacks,tree,etc.
