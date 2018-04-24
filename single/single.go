@@ -4,16 +4,9 @@ import (
 	"fmt"
 )
 
-type Payload struct {
-	name string
-	age int
-	address string
-	phone string
-}
-
 type Node struct {
 	next *Node
-	payload *Payload
+	payload interface{}
 }
 
 type List struct {
@@ -29,7 +22,7 @@ func (l *List) CreateList() {
 	l.last 	= nil
 }
 
-func (l *List) InsertFirst(payload *Payload) {
+func (l *List) InsertFirst(payload interface{}) {
 
 	node := &Node{payload: payload}
 	if l.first == nil {
@@ -46,16 +39,16 @@ func (l *List) InsertFirst(payload *Payload) {
 	}
 }
 
-func (l *List) InsertAfter(payload *Payload, name string) {
+func (l *List) InsertAfter(payload interface{}, search interface{}) {
 	
 	node := &Node{payload: payload}
 
 	if l.first == nil {
 		fmt.Println("List is empty")
 	} else {
-		n := l.FindByName(name)
-		if n.payload.name == "" {
-			fmt.Println("Inserting after '"+ name +"' - No data with name '"+ name +"'")
+		n := l.FindByName(search)
+		if n.payload == -1 {
+			fmt.Println("Inserting after '"+ search.(string) +"' - No data with name '"+ search.(string) +"'")
 		} else {
 			node.next = n.next
 			n.next = node
@@ -63,7 +56,7 @@ func (l *List) InsertAfter(payload *Payload, name string) {
 	}
 }
 
-func (l *List) InsertLast(payload *Payload) {
+func (l *List) InsertLast(payload interface{}) {
 	
 	node := &Node{payload: payload}
 	if l.first == nil {
@@ -86,14 +79,14 @@ func (l *List) DeleteFirst() {
 	}
 }
 
-func (l *List) DeleteAfter(name string) {
+func (l *List) DeleteAfter(search interface{}) {
 
 	if l.first == nil {
 		fmt.Println("List is empty")
 	} else {
-		n := l.FindByName(name)
-		if n.payload.name == "" {
-			fmt.Println("Deleting after '"+ name +"' - No data with name '"+ name +"'")
+		n := l.FindByName(search)
+		if n.payload == -1 {
+			fmt.Println("Deleting after '", search ,"' - No data with name '", search ,"'")
 		} else {
 			p := n.next
 			n.next = p.next
@@ -118,17 +111,15 @@ func (l *List) DeleteLast() {
 	}
 }
 
-func (l *List) FindByName(name string) (n *Node) {
+func (l *List) FindByName(search interface{}) (n *Node) {
 
 	n = &Node{
-		payload: &Payload {
-			name:"",
-		},
+		payload: -1,
 	}
 
 	p := l.first
 	for p != nil {
-		if p.payload.name == name {
+		if p.payload == search {
 			n = p
 			break
 		}
@@ -141,44 +132,23 @@ func (l *List) FindByName(name string) (n *Node) {
 func (l *List) PrintAll() {
 
 	p := l.first
-	i := 1
 	for p != nil {
-		fmt.Println(i ,".", p.payload.name ,"|", p.payload.age ,"|", p.payload.address ,"|", p.payload.phone)
-		i++
+		fmt.Print("| " ,p.payload, " ")
 		p = p.next
 	}
+	fmt.Print("|", "\n")
 }
 
 func main() {
 	l := &List{}
 	l.CreateList()
-
-	p := &Payload {
-		name: "Muhammad",
-		age: 22,
-		address: "ldlaksmdlkamsdlk",
-		phone: "0842342342343",
-	}
-	l.InsertFirst(p)
-
-	p2 := &Payload {
-		name: "Irhas",
-		age: 24,
-		address: "jalan jalan",
-		phone: "0842342342343",
-	}
-	l.InsertLast(p2)
-
-	p3 := &Payload {
-		name: "Fathir",
-		age: 23,
-		address: "ldlaksmdlkamsdlk",
-		phone: "0842342342343",
-	}
-	l.InsertAfter(p3, "Muhammad")
+ 
+	l.InsertFirst(1)
+	l.InsertLast(3)
+	l.InsertAfter(2, 1)
 
 	l.DeleteFirst()
-	l.DeleteAfter("Muhammad")
+	l.DeleteAfter(1)
 	l.DeleteLast()
 
 	l.PrintAll()
