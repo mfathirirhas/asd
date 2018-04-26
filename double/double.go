@@ -49,7 +49,7 @@ func (l *List) InsertAfter(payload interface{}, search interface{}) {
 	} else {
 		n := l.FindByName(search)
 		if n.payload == -1 {
-			fmt.Println("Inserting after '"+ search.(string) +"' - No data with name '"+ search.(string) +"'")
+			fmt.Println("Inserting after '", search ,"' - No data with name '", search ,"'")
 		} else {
 			node.next = n.next
 			n.next.prev = node
