@@ -88,13 +88,13 @@ func (l *ParentList) InsertLastParent(payload interface{}) {
 
 }
 
-func (l *ParentList) InsertFirstChild(parent interface{} ,payload interface{}) {
+func (l *ParentList) InsertFirstChild(childPayload interface{}, searchParent interface{}) {
 
 	node := &ChildNode {
-		childPayload: payload,
+		childPayload: childPayload,
 	}
 
-	parentNode := l.FindParent(parent)
+	parentNode := l.FindParent(searchParent)
 	if parentNode.parentPayload != -1 {
 		if parentNode.childList.firstC == nil {
 			parentNode.childList.firstC = node
@@ -105,7 +105,45 @@ func (l *ParentList) InsertFirstChild(parent interface{} ,payload interface{}) {
 			parentNode.childList.firstC = node
 		}
 	} else {
-		fmt.Print("No parent found")
+		fmt.Print("No parent found \n")
+	}
+}
+
+func (l *ParentList) InsertAfterChild(child interface{}, searchChild interface{}, searchParent interface{}) {
+
+	node := &ChildNode {
+		childPayload: child,
+	}
+
+	parentNode := l.FindParent(searchParent)
+	if parentNode.parentPayload != -1 {
+		childNode := l.FindChild(searchChild, parentNode)
+		if childNode.childPayload != -1 {
+			node.nextC = childNode.nextC
+			node.prevC = childNode
+			childNode.nextC.prevC = node
+			childNode.nextC = node
+		} else {
+			fmt.Print("No child found \n")
+		}
+	} else {
+		fmt.Print("No parent found \n")
+	}
+}
+
+func (l *ParentList) InsertLastChild(childPayload interface{}, searchParent interface{}) {
+
+	node := &ChildNode {
+		childPayload: childPayload,
+	}
+
+	parentNode := l.FindParent(searchParent)
+	if parentNode.parentPayload != -1 {
+		node.prevC = parentNode.childList.lastC
+		parentNode.childList.lastC.nextC = node
+		parentNode.childList.lastC = node
+	} else {
+		fmt.Print("Inserting child to last in parent ", searchParent ," - No parent found \n")
 	}
 }
 
@@ -119,11 +157,30 @@ func (l *ParentList) FindParent(payload interface{}) (n *ParentNode) {
 	for p != nil {
 		if p.parentPayload == payload {
 			n = p
+			break
 		}
 		p = p.nextP
 	}
 
 	return n
+}
+
+func (l *ParentList) FindChild(childPayload interface{}, parentNode *ParentNode) (cn *ChildNode) {
+
+	cn = &ChildNode {
+		childPayload: -1,
+	}
+
+	p := parentNode.childList.firstC
+	for p != nil {
+		if p.childPayload == childPayload {
+			cn = p
+			break
+		}
+		p = p.nextC
+	}
+
+	return cn
 }
 
 func (l *ParentList) PrintAllParent() {
@@ -133,7 +190,7 @@ func (l *ParentList) PrintAllParent() {
 		fmt.Print(" | " ,p.parentPayload)
 		p = p.nextP
 	}
-	fmt.Print(" | ")
+	fmt.Print(" | ", "\n")
 }
 
 func (l *ParentList) PrintAll() {
@@ -154,6 +211,8 @@ func (l *ParentList) PrintAll() {
 func main() {
 	l := &ParentList{}
 	l.CreateParentList()
+
+	// parent
 	l.InsertFirstParent(1)
 	l.InsertFirstParent(2)
 	l.InsertFirstParent(3)
@@ -164,13 +223,22 @@ func main() {
 	l.InsertLastParent(99)
 	l.InsertLastParent(100)
 
-	l.InsertFirstChild(3, 4)
-	l.InsertFirstChild(3, 5)
-	l.InsertFirstChild(2, 90)
-	l.InsertFirstChild(1, 9)
-	l.InsertFirstChild(1, 4)
-	l.InsertFirstChild(1, 5)
+	// child
+	l.InsertFirstChild(4, 3)
+	l.InsertFirstChild(5, 3)
+	l.InsertFirstChild(90, 2)
+	l.InsertFirstChild(9, 1)
+	l.InsertFirstChild(4, 1)
+	l.InsertFirstChild(5, 1)
 
-	// l.PrintAllParent()
+	l.InsertAfterChild(6, 5, 3)
+	l.InsertAfterChild(7, 6, 3)
+	l.InsertAfterChild(6, 5, 1)
+	l.InsertAfterChild(8, 4, 1)
+
+	l.InsertLastChild(10, 1)
+	l.InsertLastChild(11, 1)
+
+	l.PrintAllParent()
 	l.PrintAll()
 }
