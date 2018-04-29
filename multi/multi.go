@@ -88,6 +88,48 @@ func (l *ParentList) InsertLastParent(payload interface{}) {
 
 }
 
+func (l *ParentList) DeleteFirstParent() {
+
+	if l.firstP == nil {
+		fmt.Println("Parent List is empty")
+	} else {
+		p := l.firstP
+		l.firstP = p.nextP
+		p.nextP.prevP = nil
+		p.nextP = nil
+	}
+}
+
+func (l *ParentList) DeleteAfterParent(searchParent interface{}) {
+
+	if l.firstP == nil {
+		fmt.Println("Parent list is empty")
+	} else {
+		n := l.FindParent(searchParent)
+		if n.parentPayload == -1 {
+			fmt.Println("No parent found")
+		} else {
+			p := n.nextP
+			n.nextP = p.nextP
+			p.nextP.prevP = n
+			p.nextP = nil
+			p.prevP = nil
+		}
+	}
+}
+
+func (l *ParentList) DeleteLastParent() {
+
+	if l.firstP == nil {
+		fmt.Println("Parent list is empty")
+	} else {
+		p := l.lastP
+		l.lastP = p.prevP
+		p.prevP.nextP = nil
+		p.prevP = nil
+	}
+}
+
 func (l *ParentList) InsertFirstChild(childPayload interface{}, searchParent interface{}) {
 
 	node := &ChildNode {
@@ -223,21 +265,25 @@ func main() {
 	l.InsertLastParent(99)
 	l.InsertLastParent(100)
 
+	l.DeleteFirstParent()
+	l.DeleteAfterParent(2)
+	l.DeleteLastParent()
+
 	// child
-	l.InsertFirstChild(4, 3)
-	l.InsertFirstChild(5, 3)
-	l.InsertFirstChild(90, 2)
-	l.InsertFirstChild(9, 1)
-	l.InsertFirstChild(4, 1)
-	l.InsertFirstChild(5, 1)
+	// l.InsertFirstChild(4, 3)
+	// l.InsertFirstChild(5, 3)
+	// l.InsertFirstChild(90, 2)
+	// l.InsertFirstChild(9, 1)
+	// l.InsertFirstChild(4, 1)
+	// l.InsertFirstChild(5, 1)
 
-	l.InsertAfterChild(6, 5, 3)
-	l.InsertAfterChild(7, 6, 3)
-	l.InsertAfterChild(6, 5, 1)
-	l.InsertAfterChild(8, 4, 1)
+	// l.InsertAfterChild(6, 5, 3)
+	// l.InsertAfterChild(7, 6, 3)
+	// l.InsertAfterChild(6, 5, 1)
+	// l.InsertAfterChild(8, 4, 1)
 
-	l.InsertLastChild(10, 1)
-	l.InsertLastChild(11, 1)
+	// l.InsertLastChild(10, 1)
+	// l.InsertLastChild(11, 1)
 
 	l.PrintAllParent()
 	l.PrintAll()
