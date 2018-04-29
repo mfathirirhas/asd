@@ -189,6 +189,72 @@ func (l *ParentList) InsertLastChild(childPayload interface{}, searchParent inte
 	}
 }
 
+func (l *ParentList) DeleteFirstChild(searchParent interface{}) {
+
+	if l.firstP == nil {
+		fmt.Println("Parent list is empty")
+	} else {
+		parentNode := l.FindParent(searchParent)
+		if parentNode.parentPayload == -1 {
+			fmt.Println("No parent found")
+		} else {
+			p := parentNode.childList.firstC
+			if p == nil {
+				fmt.Println("Child list is empty")
+			} else {
+				parentNode.childList.firstC = p.nextC
+				p.nextC.prevC = nil
+				p.nextC = nil
+			}
+		}
+	}
+}
+
+func (l *ParentList) DeleteAfterChild(searchChild interface{}, searchParent interface{}) {
+
+	if l.firstP == nil {
+		fmt.Println("Parent list is empty")
+	} else {
+		parentNode := l.FindParent(searchParent)
+		if parentNode.parentPayload == -1 {
+			fmt.Println("No parent found")
+		} else {
+			p := parentNode.childList.firstC
+			if p == nil {
+				fmt.Println("Child list is empty")
+			} else {
+				childNode := l.FindChild(searchChild, parentNode)
+				if childNode.childPayload == -1 {
+					fmt.Println("No child found")
+				} else {
+					pc := childNode.nextC
+					childNode.nextC = pc.nextC
+					pc.nextC.prevC = childNode
+					pc.nextC = nil
+					pc.prevC = nil
+				}
+			}
+		}
+	}
+}
+
+func (l *ParentList) DeleteLastChild(searchParent interface{}) {
+
+	if l.firstP == nil {
+		fmt.Println("Parent list is empty")
+	} else {
+		parentNode := l.FindParent(searchParent)
+		if parentNode.parentPayload == -1 {
+			fmt.Println("No parent found")
+		} else {
+			pc := parentNode.childList.lastC
+			parentNode.childList.lastC = pc.prevC
+			pc.prevC.nextC = nil
+			pc.prevC = nil
+		}
+	}
+}
+
 func (l *ParentList) FindParent(payload interface{}) (n *ParentNode) {
 
 	n = &ParentNode {
@@ -270,20 +336,24 @@ func main() {
 	l.DeleteLastParent()
 
 	// child
-	// l.InsertFirstChild(4, 3)
-	// l.InsertFirstChild(5, 3)
-	// l.InsertFirstChild(90, 2)
-	// l.InsertFirstChild(9, 1)
-	// l.InsertFirstChild(4, 1)
-	// l.InsertFirstChild(5, 1)
+	l.InsertFirstChild(4, 3)
+	l.InsertFirstChild(5, 3)
+	l.InsertFirstChild(90, 2)
+	l.InsertFirstChild(9, 1)
+	l.InsertFirstChild(4, 1)
+	l.InsertFirstChild(5, 1)
 
-	// l.InsertAfterChild(6, 5, 3)
-	// l.InsertAfterChild(7, 6, 3)
-	// l.InsertAfterChild(6, 5, 1)
-	// l.InsertAfterChild(8, 4, 1)
+	l.InsertAfterChild(6, 5, 3)
+	l.InsertAfterChild(7, 6, 3)
+	l.InsertAfterChild(6, 5, 1)
+	l.InsertAfterChild(8, 4, 1)
 
-	// l.InsertLastChild(10, 1)
-	// l.InsertLastChild(11, 1)
+	l.InsertLastChild(10, 1)
+	l.InsertLastChild(11, 1)
+
+	l.DeleteFirstChild(1)
+	l.DeleteAfterChild(5, 3)
+	l.DeleteLastChild(1)
 
 	l.PrintAllParent()
 	l.PrintAll()
