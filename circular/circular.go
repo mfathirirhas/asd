@@ -52,7 +52,7 @@ func (l *List) InsertAfter(payload interface{}, search interface{}) {
 	if l.start == nil {
 		fmt.Println("List is empty")
 	} else {
-		n := l.FindByName(search)
+		n := l.Find(search)
 		if n.payload == -1 {
 			fmt.Println("Inserting after '", search ,"' - No data with name '", search ,"'")
 		} else {
@@ -99,7 +99,7 @@ func (l *List) DeleteAfter(search interface{}) {
 	if l.start == nil {
 		fmt.Println("List is empty")
 	} else {
-		n := l.FindByName(search)
+		n := l.Find(search)
 		if n.payload == -1 {
 			fmt.Println("Deleting after '", search ,"' - No data with name '", search ,"'")
 		} else {
@@ -126,7 +126,7 @@ func (l *List) DeleteLast() {
 	}
 }
 
-func (l *List) FindByName(search interface{}) (n *Node) {
+func (l *List) Find(search interface{}) (n *Node) {
 
 	n = &Node{
 		payload: -1,
