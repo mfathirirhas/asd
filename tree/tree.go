@@ -48,6 +48,58 @@ func (t *Tree) InsertNode(payload int) {
 	}
 }
 
+func (t *Tree) DeleteNode(payload int) {
+
+	if t.root == nil {
+		fmt.Println("Tree is empty")
+	} else {
+		n := t.FindParentNode(payload)
+		if n == nil {
+			fmt.Println("No node found")
+		} else if payload == t.root.payload{
+			t.root = nil
+		} else {
+			if payload <= n.payload {
+				n.left = nil
+			} else {
+				n.right = nil
+			}
+		}
+	}
+}
+
+func (t *Tree) FindParentNode(payload int) (n *Node) {
+
+	node := &Node {
+		payload: payload,
+	}
+
+	if t.root == nil {
+		fmt.Println("Tree is empty")
+	} else {
+		p := t.root
+		for p != nil {
+			if node.payload == t.root.payload {
+				n = t.root
+				break
+			} 
+
+			if node.payload == p.left.payload || node.payload == p.right.payload {
+				n = p
+				break
+			}
+			
+			if node.payload <= p.payload {
+				p = p.left
+			} else {
+				p = p.right
+			}
+		}
+	}
+
+	return n
+}
+
 func (t *Tree) LevelCount(node *Node) int {
 	if node == nil {
 		return 0
@@ -139,6 +191,24 @@ func main() {
 	fmt.Println("Number of Leaf Nodes : ", t.LeafNodeCount(t.root))
 	fmt.Println("Number of All Nodes:", t.AllNodeCount(t.root))
 	
+	fmt.Print("Print Prefix: ")
+	t.PrintPrefix(t.root)
+	fmt.Println()
+
+	fmt.Print("Print Infix: ")
+	t.PrintInfix(t.root)
+	fmt.Println()
+
+	fmt.Print("Print Postfix: ")
+	t.PrintPostfix(t.root)
+	fmt.Println()
+
+	fmt.Println()
+	t.DeleteNode(6)
+	fmt.Println("After deletion of 6")
+	if t.root == nil {
+		fmt.Println("Tree is empty")
+	}
 	fmt.Print("Print Prefix: ")
 	t.PrintPrefix(t.root)
 	fmt.Println()
