@@ -319,3 +319,76 @@ func (t *Tree) LookUpTree(key string) interface{} {
 	}
 	return nil
 }
+
+func (t *Tree) getKeys(n *Node, key string, keys []string) []string {
+
+	if n == nil {
+		return nil
+	} else {
+		if n.isLeaf {
+			key += n.key
+			keys = append(keys, key)
+		} else {
+			key += n.key
+		}
+		if len(n.edges) > 0 {
+			for _, e := range n.edges {
+				keys = t.getKeys(e.node, key, keys)
+			}
+		}
+	}
+	return keys
+}
+
+func (t *Tree) getValues(n *Node, values []interface{}) []interface{} {
+
+	if n == nil {
+		return nil
+	} else {
+		if n.isLeaf {
+			values = append(values, n.val)
+		}
+		if len(n.edges) > 0 {
+			for _, e := range n.edges {
+				values = t.getValues(e.node, values)
+			}
+		}
+	}
+	return values
+}
+
+func (t *Tree) getKeysValues(n *Node, key string, kv map[string]interface{}) map[string]interface{} {
+	if n == nil {
+		return nil
+	} else {
+		if n.isLeaf {
+			key += n.key
+			kv[key] = n.val
+		} else {
+			key += n.key
+		}
+		if len(n.edges) > 0 {
+			for _, e := range n.edges {
+				kv = t.getKeysValues(e.node, key, kv)
+			}
+		}
+	}
+	return kv
+}
+
+func (t *Tree) GetAllKeys() []string {
+	var key string
+	var keys []string
+	return t.getKeys(t.root, key, keys)
+}
+
+func (t *Tree) GetAllValues() []interface{} {
+	var vals []interface{}
+	return t.getValues(t.root, vals)
+}
+
+func (t *Tree) GetAllKeysValues() map[string]interface{} {
+	var key string
+	m := make(map[string]interface{})
+	return t.getKeysValues(t.root, key, m)
+}

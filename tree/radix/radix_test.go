@@ -317,3 +317,132 @@ func TestLookUpTree(t *testing.T) {
 		t.Error("Error LookUp Values")
 	}
 }
+
+func TestGetKeys(t *testing.T) {
+	key5, val5 := "romuda", 5
+	key6, val6 := "romusa", 6
+	key7, val7 := "romudala", 7
+	key8, val8 := "romudalax", 8
+	key9, val9 := "romawi", 9
+	key10, val10 := "roma", 10
+	tree2 := &Tree{}
+	tree2.CreateTree()
+	tree2.InsertTree(key5, val5)
+	tree2.InsertTree(key6, val6)
+	tree2.InsertTree(key7, val7)
+	tree2.InsertTree(key8, val8)
+	tree2.InsertTree(key9, val9)
+	tree2.InsertTree(key10, val10)
+	var l []string
+	keys := tree2.getKeys(tree2.root, "", l)
+	if keys[0] != "roma" && keys[1] != "romawi" && keys[2] != "romuda" && keys[3] != "romudala" && keys[4] != "romudalax" && keys[5] != "romusa" {
+		t.Error("Error keys are not valid")
+	}
+}
+
+func TestGetValues(t *testing.T) {
+	key5, val5 := "romuda", 5
+	key6, val6 := "romusa", 6
+	key7, val7 := "romudala", 7
+	key8, val8 := "romudalax", 8
+	key9, val9 := "romawi", 9
+	key10, val10 := "roma", 10
+	tree2 := &Tree{}
+	tree2.CreateTree()
+	tree2.InsertTree(key5, val5)
+	tree2.InsertTree(key6, val6)
+	tree2.InsertTree(key7, val7)
+	tree2.InsertTree(key8, val8)
+	tree2.InsertTree(key9, val9)
+	tree2.InsertTree(key10, val10)
+	var l []interface{}
+	values := tree2.getValues(tree2.root, l)
+	if values[0].(int) != 10 && values[1].(int) != 9 && values[2].(int) != 5 && values[3].(int) != 7 && values[4].(int) != 8 && values[5].(int) != 6 {
+		t.Error("Error values are not valid")
+	}
+}
+
+func TestGetKeysValues(t *testing.T) {
+	key5, val5 := "romuda", 5
+	key6, val6 := "romusa", 6
+	key7, val7 := "romudala", 7
+	key8, val8 := "romudalax", 8
+	key9, val9 := "romawi", 9
+	key10, val10 := "roma", 10
+	tree2 := &Tree{}
+	tree2.CreateTree()
+	tree2.InsertTree(key5, val5)
+	tree2.InsertTree(key6, val6)
+	tree2.InsertTree(key7, val7)
+	tree2.InsertTree(key8, val8)
+	tree2.InsertTree(key9, val9)
+	tree2.InsertTree(key10, val10)
+	m := make(map[string]interface{})
+	kv := tree2.getKeysValues(tree2.root, "", m)
+	if kv[key5] != val5 && kv[key6] != val6 && kv[key7] != val7 && kv[key8] != val8 && kv[key9] != val9 && kv[key10] != val10 {
+		t.Error("Error keys values are not valid")
+	}
+}
+
+func TestGetAllKeys(t *testing.T) {
+	key5, val5 := "romuda", 5
+	key6, val6 := "romusa", 6
+	key7, val7 := "romudala", 7
+	key8, val8 := "romudalax", 8
+	key9, val9 := "romawi", 9
+	key10, val10 := "roma", 10
+	tree2 := &Tree{}
+	tree2.CreateTree()
+	tree2.InsertTree(key5, val5)
+	tree2.InsertTree(key6, val6)
+	tree2.InsertTree(key7, val7)
+	tree2.InsertTree(key8, val8)
+	tree2.InsertTree(key9, val9)
+	tree2.InsertTree(key10, val10)
+	keys := tree2.GetAllKeys()
+	if keys[0] != "roma" && keys[1] != "romawi" && keys[2] != "romuda" && keys[3] != "romudala" && keys[4] != "romudalax" && keys[5] != "romusa" {
+		t.Error("Error keys are not valid")
+	}
+}
+
+func TestGetAllValues(t *testing.T) {
+	key5, val5 := "romuda", 5
+	key6, val6 := "romusa", 6
+	key7, val7 := "romudala", 7
+	key8, val8 := "romudalax", 8
+	key9, val9 := "romawi", 9
+	key10, val10 := "roma", 10
+	tree2 := &Tree{}
+	tree2.CreateTree()
+	tree2.InsertTree(key5, val5)
+	tree2.InsertTree(key6, val6)
+	tree2.InsertTree(key7, val7)
+	tree2.InsertTree(key8, val8)
+	tree2.InsertTree(key9, val9)
+	tree2.InsertTree(key10, val10)
+	values := tree2.GetAllValues()
+	if values[0].(int) != 10 && values[1].(int) != 9 && values[2].(int) != 5 && values[3].(int) != 7 && values[4].(int) != 8 && values[5].(int) != 6 {
+		t.Error("Error values are not valid")
+	}
+}
+
+func TestGetAllKeysValues(t *testing.T) {
+	key5, val5 := "romuda", 5
+	key6, val6 := "romusa", 6
+	key7, val7 := "romudala", 7
+	key8, val8 := "romudalax", 8
+	key9, val9 := "romawi", 9
+	key10, val10 := "roma", 10
+	tree2 := &Tree{}
+	tree2.CreateTree()
+	tree2.InsertTree(key5, val5)
+	tree2.InsertTree(key6, val6)
+	tree2.InsertTree(key7, val7)
+	tree2.InsertTree(key8, val8)
+	tree2.InsertTree(key9, val9)
+	tree2.InsertTree(key10, val10)
+	kv := tree2.GetAllKeysValues()
+	if kv[key5] != val5 && kv[key6] != val6 && kv[key7] != val7 && kv[key8] != val8 && kv[key9] != val9 && kv[key10] != val10 {
+		t.Error("Error keys values are not valid")
+	}
+}
