@@ -259,13 +259,13 @@ func (t *Tree) InsertTree(key string, val interface{}) {
 }
 
 // LookUp find value by key and if exist also return true
-func (t *Tree) lookUp(node *Node, key string) (interface{}, bool) {
+func (t *Tree) lookUp(node *Node, key string) (*Node, bool) {
 	var (
-		val     interface{}
-		isExist bool
+		nodeFound *Node
+		isExist   bool
 	)
 	if node == nil {
-		val, isExist = nil, false
+		nodeFound, isExist = nil, false
 	} else {
 		pos := node.FindPrefix(key)
 		p := node
@@ -273,13 +273,13 @@ func (t *Tree) lookUp(node *Node, key string) (interface{}, bool) {
 		if pos == 0 {
 			if p == t.root {
 				if p.key != "" {
-					val, isExist = nil, false
+					nodeFound, isExist = nil, false
 				} else {
 					e := p.findEdge(key[0])
 					if e != nil {
-						val, isExist = t.lookUp(e.node, key)
+						nodeFound, isExist = t.lookUp(e.node, key)
 					} else {
-						val, isExist = nil, false
+						nodeFound, isExist = nil, false
 					}
 				}
 			}
@@ -287,35 +287,35 @@ func (t *Tree) lookUp(node *Node, key string) (interface{}, bool) {
 		_, nodeKeyDiff, inputKeyDiff := findIncision(p.key, key, pos)
 
 		if nodeKeyDiff != "" && inputKeyDiff != "" {
-			val, isExist = nil, false
+			nodeFound, isExist = nil, false
 		}
 
 		if nodeKeyDiff != "" && inputKeyDiff == "" {
-			val, isExist = nil, false
+			nodeFound, isExist = nil, false
 		}
 
 		if nodeKeyDiff == "" && inputKeyDiff != "" {
 			e := p.findEdge(inputKeyDiff[0])
 			if e != nil {
-				val, isExist = t.lookUp(e.node, inputKeyDiff)
+				nodeFound, isExist = t.lookUp(e.node, inputKeyDiff)
 			} else {
-				val, isExist = nil, false
+				nodeFound, isExist = nil, false
 			}
 		}
 
 		// if both remainder empty
 		if nodeKeyDiff == "" && inputKeyDiff == "" {
 			if p.isLeaf {
-				val, isExist = p.val, true
+				nodeFound, isExist = p, true
 			}
 		}
 	}
-	return val, isExist
+	return nodeFound, isExist
 }
 
 func (t *Tree) LookUpTree(key string) interface{} {
-	if val, isExist := t.lookUp(t.root, key); isExist {
-		return val
+	if nodeFound, isExist := t.lookUp(t.root, key); isExist {
+		return nodeFound.val
 	}
 	return nil
 }
