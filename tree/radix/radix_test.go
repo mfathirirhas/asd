@@ -292,6 +292,38 @@ func TestInsertTree(t *testing.T) {
 	}
 }
 
+func TestLookUp(t *testing.T) {
+	key5, val5 := "romuda", 5
+	key6, val6 := "romusa", 6
+	key7, val7 := "romudala", 7
+	key8, val8 := "romudalax", 8
+	key9, val9 := "romawi", 9
+	key10, val10 := "roma", 10
+	tree2 := &Tree{}
+	tree2.CreateTree()
+	tree2.InsertTree(key5, val5)
+	tree2.InsertTree(key6, val6)
+	tree2.InsertTree(key7, val7)
+	tree2.InsertTree(key8, val8)
+	tree2.InsertTree(key9, val9)
+	tree2.InsertTree(key10, val10)
+	checkVal5, parent5, isExist5 := tree2.lookUp(tree2.root, nil, key5)
+	checkVal6, parent6, isExist6 := tree2.lookUp(tree2.root, nil, key6)
+	checkVal7, parent7, isExist7 := tree2.lookUp(tree2.root, nil, key7)
+	checkVal8, parent8, isExist8 := tree2.lookUp(tree2.root, nil, key8)
+	checkVal9, parent9, isExist9 := tree2.lookUp(tree2.root, nil, key9)
+	checkVal10, parent10, isExist10 := tree2.lookUp(tree2.root, nil, key10)
+	if checkVal5.val != val5 && checkVal6.val != val6 && checkVal7.val != val7 && checkVal8.val != val8 && checkVal9.val != val9 && checkVal10.val != val10 {
+		t.Error("Error LookUp Values")
+	}
+	if parent5.key != "u" && parent6.key != "u" && parent7.key != "da" && parent8.key != "la" && parent9.key != "a" && parent10.key != "rom" {
+		t.Error("Error LookUp Values")
+	}
+	if !isExist5 && !isExist6 && !isExist7 && !isExist8 && !isExist9 && !isExist10 {
+		t.Error("Error LookUp Values")
+	}
+}
+
 func TestLookUpTree(t *testing.T) {
 	key5, val5 := "romuda", 5
 	key6, val6 := "romusa", 6

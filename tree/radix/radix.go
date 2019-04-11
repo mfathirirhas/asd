@@ -259,13 +259,13 @@ func (t *Tree) InsertTree(key string, val interface{}) {
 }
 
 // LookUp find value by key and if exist also return true
-func (t *Tree) lookUp(node *Node, key string) (*Node, bool) {
+func (t *Tree) lookUp(node, nodeParent *Node, key string) (*Node, *Node, bool) {
 	var (
-		nodeFound *Node
-		isExist   bool
+		nodeFound, nodeFoundParent *Node
+		isExist                    bool
 	)
 	if node == nil {
-		nodeFound, isExist = nil, false
+		nodeFound, nodeFoundParent, isExist = nil, nil, false
 	} else {
 		pos := node.FindPrefix(key)
 		p := node
@@ -273,13 +273,13 @@ func (t *Tree) lookUp(node *Node, key string) (*Node, bool) {
 		if pos == 0 {
 			if p == t.root {
 				if p.key != "" {
-					nodeFound, isExist = nil, false
+					nodeFound, nodeFoundParent, isExist = nil, nil, false
 				} else {
 					e := p.findEdge(key[0])
 					if e != nil {
-						nodeFound, isExist = t.lookUp(e.node, key)
+						nodeFound, nodeFoundParent, isExist = t.lookUp(e.node, p, key)
 					} else {
-						nodeFound, isExist = nil, false
+						nodeFound, nodeFoundParent, isExist = nil, nil, false
 					}
 				}
 			}
@@ -287,34 +287,34 @@ func (t *Tree) lookUp(node *Node, key string) (*Node, bool) {
 		_, nodeKeyDiff, inputKeyDiff := findIncision(p.key, key, pos)
 
 		if nodeKeyDiff != "" && inputKeyDiff != "" {
-			nodeFound, isExist = nil, false
+			nodeFound, nodeFoundParent, isExist = nil, nil, false
 		}
 
 		if nodeKeyDiff != "" && inputKeyDiff == "" {
-			nodeFound, isExist = nil, false
+			nodeFound, nodeFoundParent, isExist = nil, nil, false
 		}
 
 		if nodeKeyDiff == "" && inputKeyDiff != "" {
 			e := p.findEdge(inputKeyDiff[0])
 			if e != nil {
-				nodeFound, isExist = t.lookUp(e.node, inputKeyDiff)
+				nodeFound, nodeFoundParent, isExist = t.lookUp(e.node, p, inputKeyDiff)
 			} else {
-				nodeFound, isExist = nil, false
+				nodeFound, nodeFoundParent, isExist = nil, nil, false
 			}
 		}
 
 		// if both remainder empty
 		if nodeKeyDiff == "" && inputKeyDiff == "" {
 			if p.isLeaf {
-				nodeFound, isExist = p, true
+				nodeFound, nodeFoundParent, isExist = p, nodeParent, true
 			}
 		}
 	}
-	return nodeFound, isExist
+	return nodeFound, nodeFoundParent, isExist
 }
 
 func (t *Tree) LookUpTree(key string) interface{} {
-	if nodeFound, isExist := t.lookUp(t.root, key); isExist {
+	if nodeFound, _, isExist := t.lookUp(t.root, nil, key); isExist {
 		return nodeFound.val
 	}
 	return nil
