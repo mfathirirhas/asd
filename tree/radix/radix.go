@@ -259,7 +259,7 @@ func (t *Tree) InsertTree(key string, val interface{}) {
 }
 
 // LookUp find value by key and if exist also return true
-func (t *Tree) LookUp(node *Node, key string) (interface{}, bool) {
+func (t *Tree) lookUp(node *Node, key string) (interface{}, bool) {
 	var (
 		val     interface{}
 		isExist bool
@@ -277,7 +277,7 @@ func (t *Tree) LookUp(node *Node, key string) (interface{}, bool) {
 				} else {
 					e := p.findEdge(key[0])
 					if e != nil {
-						val, isExist = t.LookUp(e.node, key)
+						val, isExist = t.lookUp(e.node, key)
 					} else {
 						val, isExist = nil, false
 					}
@@ -297,7 +297,7 @@ func (t *Tree) LookUp(node *Node, key string) (interface{}, bool) {
 		if nodeKeyDiff == "" && inputKeyDiff != "" {
 			e := p.findEdge(inputKeyDiff[0])
 			if e != nil {
-				val, isExist = t.LookUp(e.node, inputKeyDiff)
+				val, isExist = t.lookUp(e.node, inputKeyDiff)
 			} else {
 				val, isExist = nil, false
 			}
@@ -314,7 +314,7 @@ func (t *Tree) LookUp(node *Node, key string) (interface{}, bool) {
 }
 
 func (t *Tree) LookUpTree(key string) interface{} {
-	if val, isExist := t.LookUp(t.root, key); isExist {
+	if val, isExist := t.lookUp(t.root, key); isExist {
 		return val
 	}
 	return nil
