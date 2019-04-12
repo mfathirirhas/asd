@@ -173,6 +173,62 @@ func TestAddEdge(t *testing.T) {
 	}
 }
 
+func TestDeleteEdge(t *testing.T) {
+	kid1 := &Node{
+		key: "abcd",
+		val: 2,
+	}
+	kid2 := &Node{
+		key: "bbce",
+		val: 3,
+	}
+	kid3 := &Node{
+		key: "clabla",
+		val: 4,
+	}
+	kid4 := &Node{
+		key: "dlabla2",
+		val: 5,
+	}
+	eKid1 := &Edge{
+		label: kid1.key[0],
+		node:  kid1,
+	}
+	eKid2 := &Edge{
+		label: kid2.key[0],
+		node:  kid2,
+	}
+	eKid3 := &Edge{
+		label: kid3.key[0],
+		node:  kid3,
+	}
+	eKid4 := &Edge{
+		label: kid4.key[0],
+		node:  kid4,
+	}
+	var edges Edges
+	edges = append(edges, eKid1)
+	edges = append(edges, eKid2)
+	edges = append(edges, eKid3)
+	edges = append(edges, eKid4)
+	n := &Node{
+		key:   "abc",
+		val:   1,
+		edges: edges,
+	}
+	if len(n.edges) != 4 {
+		t.Error("Error on deleting edge")
+	}
+	n.deleteEdge(eKid2)
+	if len(n.edges) != 3 || n.edges[1].label != 99 {
+		t.Error("Error on deleting edge")
+	}
+	n.deleteEdge(eKid4)
+	if len(n.edges) != 2 || n.edges[1].label != 99 {
+		t.Error("Error on deleting edge")
+	}
+}
+
 func TestCheckEdges(t *testing.T) {
 	n := &Node{
 		key: "abc",

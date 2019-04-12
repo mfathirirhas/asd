@@ -130,6 +130,19 @@ func (n *Node) addEdge(edges ...*Edge) {
 	sort.Sort(n.edges)
 }
 
+// deleteEdge delete edge(s) in a node
+func (n *Node) deleteEdge(edges ...*Edge) {
+	for _, vArg := range edges {
+		for iNode, vNode := range n.edges {
+			if vArg.label == vNode.label {
+				n.edges = append(n.edges[:iNode], n.edges[iNode+1:]...)
+				break
+			}
+		}
+	}
+	sort.Sort(n.edges)
+}
+
 // checkEdges check if a node has childs(true) or not(false)
 func (n *Node) checkEdges() bool {
 	if len(n.edges) > 0 {
